@@ -1,18 +1,20 @@
 #!/bin/bash
+set -e
 
-# Build libpcap (static)
+# Build libpcap
 git clone https://github.com/the-tcpdump-group/libpcap.git
 cd libpcap
-./autogen.sh && \
-    ./configure --enable-static --disable-shared && \
-    make -j$(nproc)
-
-# Build tcpdump (static)
+./autogen.sh
+./configure --enable-static --disable-shared
+make -j$(nproc)
 cd ..
+
+# Build tcpdump
 git clone https://github.com/the-tcpdump-group/tcpdump.git
 cd tcpdump
-./autogen.sh && \
-    LDFLAGS="-static" ./configure --enable-static --disable-shared && \
-    make -j$(nproc)
+./autogen.sh
+LDFLAGS="-static" ./configure --enable-static --disable-shared
+make -j$(nproc)
+# Export
 cp tcpdump /out/tcpdump
 cd ..
